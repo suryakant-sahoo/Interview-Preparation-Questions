@@ -17,3 +17,15 @@ from students s
 where not exists
 (select 1 from enrollment e
 where s.student_id = e.student_id);
+
+/*How would you find the latest record of each employess/customer*/
+
+with cte as 
+(select
+*,
+row_number() over (partition by employee order by update_date desc) as rn
+from employees)
+select * from 
+cte where rn = 1;
+
+
