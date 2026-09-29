@@ -28,4 +28,9 @@ from employees)
 select * from 
 cte where rn = 1;
 
-
+/*How would ypu check NULL using SQL*/
+SELECT
+    COUNT(*) AS total_records,
+    SUM(CASE WHEN employee_id IS NULL THEN 1 ELSE 0 END) AS missing_employee_id,
+    SUM(CASE WHEN department IS NULL THEN 1 ELSE 0 END) AS missing_department
+FROM employee_data;
