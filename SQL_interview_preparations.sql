@@ -18,6 +18,7 @@ where not exists
 (select 1 from enrollment e
 where s.student_id = e.student_id);
 
+
 /*How would you find the latest record of each employess/customer*/
 
 with cte as 
