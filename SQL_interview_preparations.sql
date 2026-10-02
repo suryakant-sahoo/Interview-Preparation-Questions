@@ -205,4 +205,85 @@ from employees
 where productivity >
 (select avg(productivity) from performance);
 
+/*Departments with above-average employee count*/
+
+with cte as
+(select
+department,
+count(*) as total_employee_count
+from employees
+group by department)
+select
+department , 
+total_employee_count
+from cte where
+total_employee_count > (select avg(total_employee_count) from cte);
+
+/*Employees with at least one incident*/
+select
+e.employee_id
+from employees e
+where exists (select 1 from incodents i where e.employee_id = i.employee_id);
+
+
+/*employee with no incident*/
+select
+e.employee_id,
+i.incident_id
+from employees e
+where not exists 
+(select 1 from incidents i where e.employee_id = i.employee_id);
+
+/*Calculate department performance adn then filter it*/
+
+with cte as (
+select
+e.department,
+avg(p.productivity) as avg_productivity
+from employees e
+join performance p
+on e.employee_id = p.employee_id
+group by department)
+
+select avg_productivity
+from cte where avg_productivity > 80;
+
+/*Calculate total incidents and high-severity incidents by department.*/
+select
+e.department,
+count(*) as total_incidents,
+sum( case when i.severity = 'High' then 1 else 0 end) as high_severity_incidents
+from employees e join incidents i on e.employee_id = i.employee_id
+group by department;
+
+/*Give each employee's performance records a sequence number.*/
+select
+employee_id,
+productivity,
+report_date,
+row_number() over (partition by employee_id order by report_date desc) as rn
+from performance;
+
+/*Find latest record per employee*/
+
+with cte as 
+(select
+employee_id,
+joining_date,
+row_number() over (partition by employee_id order by joining_date desc) as rn
+from employees)
+select * from cte
+where rn = 1;
+
+/*Rank departments based on productivity*/
+
+select 
+e.department,
+sum(p.productivity) as total_prod,
+dense_rank() over (partition by e.department order by sum(p.productivity) desc) as rn
+from employees e join performance p on e.employee_id = p.employee_id
+group by department;
+
+
+
 
