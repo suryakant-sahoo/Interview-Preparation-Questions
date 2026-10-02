@@ -35,3 +35,46 @@ SELECT
     SUM(CASE WHEN employee_id IS NULL THEN 1 ELSE 0 END) AS missing_employee_id,
     SUM(CASE WHEN department IS NULL THEN 1 ELSE 0 END) AS missing_department
 FROM employee_data;
+
+
+
+-----------------------------------------------------/*50 Interview SQL Questions*/---------------------------------------------------------------
+
+--Sample tables
+1.employees(employee_id, department, location, status, joining_date)
+2.incidents(incident_id, employee_id, incident_date, incident_type, severity, location, status)
+3.performance(employee_id, report_date, productivity, utilization, aht, target)
+4.sales(employee_id, sale_date, revenue, region, product)
+5.kpi_metrics(kpi_id, kpi_name, actual_value, target_value, metric_date, department)
+6.employees_history(employee_id, department, status, effective_date, updated_date)
+
+/*Get employee ID, department and location for all employees.*/
+select employee_ID,
+department , 
+location
+from employees;
+
+/*find active employees*/
+select *
+from employees
+where
+status = 'Active';
+
+/*Find Active employees in Hyderabad*/
+select *
+from employees
+where
+status = 'Active' and location = 'Hyderabad';
+
+/*Find incidents between Jan 2026 and March 2026*/
+select *
+from incidents
+where incident_date between '01-01-2026' and '01-03-2026';
+
+/*Find employees from Hyderabd , Bangalore or Chennai*/
+select *
+from employees 
+where 
+location in ('Hyderabda','Bangalore','Chennai');
+
+
